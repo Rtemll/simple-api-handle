@@ -29,7 +29,14 @@ func PostTaskHandler(w http.ResponseWriter, r *http.Request){
  }
 
  DB.Create(&newTask) // Сохранение в базу данных
- fmt.Fprint(w, "Task added successfully")
+//  fmt.Fprint(w, "Task added successfully")
+jsonData, err := json.Marshal(newTask)
+if err != nil {
+	http.Error(w, err.Error(), http.StatusInternalServerError)
+	return
+}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonData)
 }
 func main(){
 		// Вызываем метод InitDB() из файла db.go
