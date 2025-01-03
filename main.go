@@ -8,7 +8,7 @@ import (
 
 	"github.com/gorilla/mux"
 )
-func HelloHandler(w http.ResponseWriter, r *http.Request){
+func GetTasksHandler(w http.ResponseWriter, r *http.Request){
 	var messages []Message
 	DB.Find(&messages) // Запрос всех сообщений из базы данных
 	// Преобразование слайса в JSON
@@ -72,7 +72,6 @@ func PatchTaskHandler(w http.ResponseWriter, r *http.Request) {
    }
 
 func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	taskID, _ := strconv.Atoi(params["id"])
    
@@ -84,7 +83,7 @@ func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 		   return
 	   }
 	   DB.Delete(&existingTask)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Задача удалена"})
+	w.WriteHeader(http.StatusNoContent)
    }
 
 func main(){
@@ -93,7 +92,7 @@ func main(){
 		// Автоматическая миграция модели Message 
 	DB.AutoMigrate(&Message{})
 	router := mux.NewRouter()
-	router.HandleFunc("/api/hello", HelloHandler).Methods("GET")
+	router.HandleFunc("/api/task", GetTasksHandler).Methods("GET")
 	router.HandleFunc("/api/task", PostTaskHandler).Methods("POST")
 	router.HandleFunc("/api/task/{id}", PatchTaskHandler).Methods("PATCH")
 	router.HandleFunc("/api/task/{id}", DeleteTaskHandler).Methods("DELETE")
