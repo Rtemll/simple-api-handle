@@ -1,4 +1,4 @@
-package taskService // Или ваш пакет, если он не main
+package taskService 
 
 import (
  "gorm.io/gorm"

@@ -23,9 +23,6 @@ func main() {
 	router.HandleFunc("/api/task", handler.PostTaskHandler).Methods("POST")
 	router.HandleFunc("/api/task/{id}", handler.PatchTaskHandler).Methods("PATCH")
 	router.HandleFunc("/api/task/{id}", handler.DeleteTaskHandler).Methods("DELETE")
-
-	// router.HandleFunc("/api/task/{id}", PatchTaskHandler).Methods("PATCH")
-	// router.HandleFunc("/api/task/{id}", DeleteTaskHandler).Methods("DELETE")
 	fmt.Println("Server listening on port 8080") // Добавлено для лучшей обратной связи
 	http.ListenAndServe(":8080", router)
 }
